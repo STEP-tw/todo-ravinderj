@@ -2,10 +2,11 @@
   "name": "todo-ravinderj",
   "version": "1.0.0",
   "description": "## Objective",
-  "main": "server.js",
+  "main": "app.js",
   "directories": {
     "test": "test"
   },
+  "dependencies": {},
   "devDependencies": {
     "chai": "^4.1.2"
   },
