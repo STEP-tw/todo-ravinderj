@@ -2,6 +2,7 @@ let fs = require('fs');
 const http = require('http');
 const timeStamp = require('./time.js').timeStamp;
 const WebApp = require('./webapp');
+let registered_users = [{userName:'ravinder',name:'Ravinder Jajoria'},{userName:'neeraj',name:'Neeraj Jaiswal'}];
 
 let toS = o=>JSON.stringify(o,null,2);
 
@@ -14,8 +15,18 @@ const isFile = function (fileName) {
   }
 };
 
-const serveFile = function (req, res) {
-  if(req.url=="/") req.url = "/index.html";
+let loadUser = (req,res)=>{
+  let sessionid = req.cookies.sessionid;
+  let user = registered_users.find(u=>u.sessionid==sessionid);
+  if(sessionid && user){
+    req.user = user;
+  }
+};
+
+const servePage = function (req, res) {
+  if(req.url == "/"){
+    req.url = (req.user) ? res.redirect("/homePage.html") : res.redirect("/loginPage.html");
+  }
   let fileName = 'public' + req.url;
   if (req.method == 'GET' && isFile(fileName)) {
     res.setHeader("Content-Type",getContentType(fileName));
@@ -54,6 +65,19 @@ const getContentType = function(file) {
   return extenstions[extn];
 };
 
+const handleCookies = (req,res)=>{
+  let user = registered_users.find(u=>u.userName==req.body.userName);
+  if(!user) {
+    res.setHeader('Set-Cookie',`logInFailed=true`);
+    res.redirect('/loginPage.html');
+    return;
+  }
+  let sessionid = new Date().getTime();
+  res.setHeader('Set-Cookie',`sessionid=${sessionid}`);
+  user.sessionid = sessionid;
+  res.redirect('/homePage.html');
+};
+
 const respondWith404 = function(req,res){
   res.statusCode = 404;
   res.write("not found");
@@ -62,7 +86,9 @@ const respondWith404 = function(req,res){
 
 let app = WebApp.create();
 app.use(logRequest);
-app.use(serveFile);
+app.use(loadUser);
+app.use(servePage);
+app.post("/login",handleCookies);
 app.use(respondWith404);
 
 const PORT = 5000;

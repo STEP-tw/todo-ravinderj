@@ -14,3 +14,12 @@ describe('app',()=>{
     })
   })
 })
+describe('GET /',()=>{
+  it('redirects to login page for invalid user',done=>{
+    request(app,{method:'GET',url:'/'},(res)=>{
+      th.should_be_redirected_to(res,'/loginPage.html');
+      assert.equal(res.body,"");
+      done();
+    })
+  })
+}) 
