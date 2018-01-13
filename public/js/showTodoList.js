@@ -23,11 +23,9 @@ let showTodoList = function(){
   console.log(todoLinks);
 }
 
-let sayHello = function(){
+let onReq = function(){
   let req = new XMLHttpRequest();
   req.addEventListener("load",showTodoList);
   req.open("POST","/data");
   req.send();
 }
-
-window.onload = sayHello;

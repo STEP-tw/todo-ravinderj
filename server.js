@@ -7,6 +7,9 @@ let todoData = fs.readFileSync("./data/todoData.json");
 todoData = JSON.parse(todoData);
 let registered_users = [{userName:'ravinder',name:'Ravinder Jajoria'},{userName:'neeraj',name:'Neeraj Jaiswal'}];
 
+const User = require("./public/js/todo.js").User;
+const Todo = require("./public/js/todo.js").Todo;
+
 let toS = o=>JSON.stringify(o,null,2);
 
 const isFile = function (fileName) {
@@ -47,7 +50,7 @@ let logRequest = (req,res)=>{
   `COOKIES=> ${toS(req.cookies)}`,
   `BODY=> ${toS(req.body)}`,''].join('\n');
   fs.appendFile('request.log',text,()=>{});
-  console.log(`${req.method} ${req.url} ${req.user}`);
+  console.log(`${req.method} ${req.url}`);
 }
 
 
@@ -76,18 +79,29 @@ const serveHomePage = function(req,res){
   res.end();
 }
 
-const respondWith404 = function(req,res){
-  if(req.method == "GET"){
-    res.statusCode = 404;
-    res.write("not found");
-    res.end();
-  }
+const saveTodoData = function(filePath,todoData){
+  fs.writeFileSync(filePath,todoData,"utf8");
 }
 
-const showTodoItem = function(req,res){
-  let todoItem = fs.readFileSync('./templates/createTodoItem.html',"utf8");
-  let todoPage = homePage.replace("TODO_WORKSPACE",todoItem);
-  res.write(todoPage);
+const getTodoData = function(req){
+  let body = req.body;
+  let currentUserName = req.user.userName;
+  let user = new User(currentUserName);
+  let todo = new Todo(body.title,body.description);
+  user.addTodo(todo);
+  let todoData = {};
+  todoData[currentUserName] = user;
+  return JSON.stringify(todoData,null,2);
+};
+
+const handleTodoItem = function(req,res,filePath){
+  let body = req.body;
+  if(body.title && body.description){
+    let todoData = getTodoData(req);
+    saveTodoData(filePath,todoData);
+    res.end();
+  }
+  res.redirect("/homePage.html")
   res.end();
 }
 
@@ -122,7 +136,7 @@ app.use(logRequest);
 app.use(loadUser);
 app.use(servePage);
 app.get("/homePage.html",serveHomePage);
-app.post("/create",showTodoItem);
+app.post("/create",(req,res)=>handleTodoItem(req,res,"data/todoData.json"));
 app.post("/data",sendData);
 app.post("/login",loginUser);
 app.post("/logout",logoutUser)

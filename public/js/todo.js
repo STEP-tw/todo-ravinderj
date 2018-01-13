@@ -43,25 +43,21 @@ const Todo = class {
 //////////////////////////////////////////
 
 const TodoItem = class {
-  constructor(name,description){
-    this.name = name;
+  constructor(description){
     this.description = description;
-    this.tag = "undone";
+    this.done = false;
   }
   getDescription(){
     return this.description;
-  }
-  changeName(name){
-    this.name = name;
   }
   changeDescription(description){
     this.description = description;
   }
   getMarkDone(){
-    this.tag = "done";
+    this.done = true;
   }
   getMarkUndone(){
-    this.tag = "undone";
+    this.done = false;
   }
 }
 
