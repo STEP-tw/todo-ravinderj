@@ -2,6 +2,9 @@ let fs = require('fs');
 const http = require('http');
 const timeStamp = require('./time.js').timeStamp;
 const WebApp = require('./webapp');
+let homePage = fs.readFileSync('./templates/homePage.html',"utf8");
+let todoData = fs.readFileSync("./data/todoData.json");
+todoData = JSON.parse(todoData);
 let registered_users = [{userName:'ravinder',name:'Ravinder Jajoria'},{userName:'neeraj',name:'Neeraj Jaiswal'}];
 
 let toS = o=>JSON.stringify(o,null,2);
@@ -44,7 +47,7 @@ let logRequest = (req,res)=>{
   `COOKIES=> ${toS(req.cookies)}`,
   `BODY=> ${toS(req.body)}`,''].join('\n');
   fs.appendFile('request.log',text,()=>{});
-  console.log(`${req.method} ${req.url}`);
+  console.log(`${req.method} ${req.url} ${req.user}`);
 }
 
 
@@ -65,10 +68,41 @@ const getContentType = function(file) {
   return extenstions[extn];
 };
 
-const handleCookies = (req,res)=>{
-  let user = registered_users.find(u=>u.userName==req.body.userName);
+const serveHomePage = function(req,res){
+  let createTodoForm = fs.readFileSync("./templates/createTodo.html");
+  let todoPage = homePage.replace(/TODO_WORKSPACE/,createTodoForm);
+  res.setHeader("Content-Type","text/html");
+  res.write(todoPage);
+  res.end();
+}
+
+const respondWith404 = function(req,res){
+  if(req.method == "GET"){
+    res.statusCode = 404;
+    res.write("not found");
+    res.end();
+  }
+}
+
+const showTodoItem = function(req,res){
+  let todoItem = fs.readFileSync('./templates/createTodoItem.html',"utf8");
+  let todoPage = homePage.replace("TODO_WORKSPACE",todoItem);
+  res.write(todoPage);
+  res.end();
+}
+
+const sendData = function(req,res){
+  res.setHeader("Content-Type","application/json");
+  res.write(JSON.stringify(todoData));
+  res.end();
+};
+
+const loginUser = (req,res)=>{
+  console.log(req.body);
+  let user = registered_users.find(u=>u.userName==req.body.name);
   if(!user) {
     res.setHeader('Set-Cookie',`logInFailed=true`);
+    res.setHeader("Content-Type","text/html");
     res.redirect('/loginPage.html');
     return;
   }
@@ -78,20 +112,22 @@ const handleCookies = (req,res)=>{
   res.redirect('/homePage.html');
 };
 
-const respondWith404 = function(req,res){
-  res.statusCode = 404;
-  res.write("not found");
-  res.end();
-}
+const logoutUser = (req,res)=>{
+  res.setHeader('Set-Cookie',[`logInFailed=false;Max-Age=0`,`sessionid=0;Max-Age=0`]);
+  res.redirect('/loginPage.html');
+};
 
 let app = WebApp.create();
 app.use(logRequest);
 app.use(loadUser);
 app.use(servePage);
-app.post("/login",handleCookies);
-app.use(respondWith404);
+app.get("/homePage.html",serveHomePage);
+app.post("/create",showTodoItem);
+app.post("/data",sendData);
+app.post("/login",loginUser);
+app.post("/logout",logoutUser)
 
-const PORT = 5000;
+const PORT = 8000;
 let server = http.createServer(app);
 server.on('error',e=>console.error('**error**',e.message));
 server.listen(PORT,(e)=>console.log(`server listening at ${PORT}`));

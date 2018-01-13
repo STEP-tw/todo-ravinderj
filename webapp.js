@@ -1,3 +1,5 @@
+const qs = require("querystring");
+
 const toKeyValue = kv=>{
     let parts = kv.split('=');
     return {key:parts[0].trim(),value:parts[1].trim()};
@@ -6,7 +8,7 @@ const accumulate = (o,kv)=> {
   o[kv.key] = kv.value;
   return o;
 };
-const parseBody = text=> text && text.split('&').map(toKeyValue).reduce(accumulate,{}) || {};
+const parseBody = text=> qs.parse(text);
 let redirect = function(path){
   console.log(`redirecting to ${path}`);
   this.statusCode = 302;
@@ -55,8 +57,8 @@ const main = function(req,res){
   req.on('data',data=>content+=data.toString())
   req.on('end',()=>{
     req.body = parseBody(content);
-    content="";
     debugger;
+    content="";
     this._preprocess.forEach(middleware=>{
       if(res.finished) return;
       middleware(req,res);
