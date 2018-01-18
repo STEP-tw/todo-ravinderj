@@ -1,31 +1,25 @@
-let getAllTodos = function(data,user){
-  let allTodos = Object.keys(data[user].todos);
-  return allTodos.map((todo)=>{
-    return data[user].todos[todo].title;
-  });
-}
-
-let createLink = (todoName)=>{
-  let link = `<a href=${todoName}>${todoName}</a>`
+let createLink = (titleInfo)=>{
+  let link = `<a href=${titleInfo.title}>${titleInfo.userName}/${titleInfo.Id}</a>`
   return link;
 }
 
-let createTodoLinks = function(todos){
-  return todos.map(createLink).join("<br>");
+let createTodoLinks = function(titlesInfo){
+  return titlesInfo.map(createLink).join("<br>");
 }
 
 let showTodoList = function(){
-  let data = JSON.parse(this.responseText);
+  let titlesInfo = JSON.parse(this.responseText);
   let todoList = document.getElementById("todoList");
-  let allTodos = getAllTodos(data,"ravinder");
-  let todoLinks = createTodoLinks(allTodos);
+  let todoLinks = createTodoLinks(titlesInfo);
   todoList.innerHTML = todoLinks;
   console.log(todoLinks);
 }
 
-let onReq = function(){
+let showTitles = function(){
   let req = new XMLHttpRequest();
   req.addEventListener("load",showTodoList);
-  req.open("POST","/data");
+  req.open("GET","/titles");
   req.send();
 }
+
+window.onload = showTitles;
