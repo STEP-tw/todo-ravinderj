@@ -1,5 +1,5 @@
 let createLink = (titleInfo)=>{
-  let link = `<a href=${titleInfo.title}>${titleInfo.userName}/${titleInfo.Id}</a>`
+  let link = `<a href=${titleInfo.userName}/${titleInfo.todoId}>${titleInfo.title}</a>`
   return link;
 }
 
