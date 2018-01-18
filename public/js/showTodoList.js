@@ -1,18 +1,16 @@
-let createLink = (titleInfo)=>{
-  let link = `<a href=${titleInfo.userName}/${titleInfo.todoId}>${titleInfo.title}</a>`
-  return link;
-}
-
-let createTodoLinks = function(titlesInfo){
-  return titlesInfo.map(createLink).join("<br>");
-}
-
 let showTodoList = function(){
   let titlesInfo = JSON.parse(this.responseText);
   let todoList = document.getElementById("todoList");
-  let todoLinks = createTodoLinks(titlesInfo);
-  todoList.innerHTML = todoLinks;
-  console.log(todoLinks);
+  console.log(titlesInfo);
+  titlesInfo.forEach((titleInfo)=>{
+    let todoLink = createLink(titleInfo);
+    let delbutton = createDelButton(titleInfo.todoId);
+    let lineBreak = document.createElement("br");
+    todoList.appendChild(todoLink);
+    todoList.appendChild(delbutton);
+    todoList.appendChild(lineBreak);
+  })
+  console.log(todoList);
 }
 
 let showTitles = function(){
