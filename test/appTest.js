@@ -48,7 +48,7 @@ describe('app', () => {
     })
   })
   describe('GET /login', () => {
-    it('serves the login page', done => {
+    it('serves login page', done => {
       request(app, { method: 'GET', url: '/login' }, res => {
         th.status_is_ok(res);
         th.body_contains(res, 'login to create to-do');
@@ -57,12 +57,23 @@ describe('app', () => {
         done();
       })
     })
+    it.skip('serves home for loggedin user', done => {
+      request(app,{method: "GET", url: "/login", cookies: "userName=ravinder"},res=>{
+        th.should_be_redirected_to(res, '/home');
+        done();
+      })
+    })
   })
   describe('GET /home', () => {
-    it('serves the home page', done => {
-      request(app, { method: 'GET', url: '/home' }, res => {
-        th.status_is_ok(res);
-        th.body_contains(res, 'create your To-Do');
+    it('serves login if no user', done => {
+      request(app, { method: 'GET', url: '/home'}, res => {
+        th.should_be_redirected_to(res,"/login");
+        done();
+      })
+    })
+    it.skip('serves home if logged in', done => {
+      request(app, { method: 'GET', url: '/home', headers: {cookie: "userName=ravinder"}}, res => {
+        th.should_be_redirected_to(res,"/home");
         done();
       })
     })
