@@ -61,7 +61,9 @@ const deleteTodo = function(event){
 };
 
 const displayTodo = function(){
-  
+  let viewContent = this.responseText;
+  let todoViewDiv = document.getElementsByClassName("todo-view")[0];
+  todoViewDiv.innerHTML = viewContent;
 }
 
 const viewTodo = function(event){
