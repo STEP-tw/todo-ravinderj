@@ -4,7 +4,8 @@ const lib = require("./lib/serverLIb.js");
 let app = WebApp.create();
 
 app.remove("/deleteTodo",lib.deleteTodo);
-app.get("/home.html", lib.serveHomePage);
+app.get("/home", lib.serveHomePage);
+app.get("/login",lib.serveLogin);
 app.get("/titles",lib.sendTitleInfo);
 app.get("/logout", lib.logoutUser);
 app.use(lib.logRequest);

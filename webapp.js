@@ -10,7 +10,7 @@ const accumulate = (o,kv)=> {
 };
 const parseBody = text=> qs.parse(text);
 let redirect = function(path){
-  // console.log(`redirecting to ${path}`);
+  console.log(`redirecting to ${path}`);
   this.statusCode = 302;
   this.setHeader('location',path);
   this.end();
