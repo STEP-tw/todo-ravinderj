@@ -12,6 +12,8 @@ app.use(lib.logRequest);
 app.use(lib.loadUser);
 app.use(lib.servePage);
 app.use(lib.todoHandler);
+app.use(lib.redirectToHomeIfLoggedin);
+app.use(lib.redirectToLoginIfLoggedOut);
 app.post("/create", lib.createTodo);
 app.post("/addItem", lib.sendTodoItem);
 app.post("/login", lib.loginUser);
