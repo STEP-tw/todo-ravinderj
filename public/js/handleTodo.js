@@ -14,14 +14,24 @@ const createDelButton = function(todoId){
   return delButton;
 }
 
+const createViewButton = (todoId)=>{
+  let viewButton = document.createElement("button");
+  viewButton.innerText = "view";
+  viewButton.id = todoId;
+  viewButton.onclick = viewTodo;
+  return viewButton;
+}
+
 const showTodo = function(){
   let todoDetails = JSON.parse(this.responseText);
   let todoList = document.getElementById("todoList");
   let todoLink = createLink(todoDetails);
   let delButton = createDelButton(todoDetails.todoId);
+  let viewButton = createViewButton(todoDetails.todoId);
   let lineBreak = document.createElement('br');
   todoList.appendChild(todoLink);
   todoList.appendChild(delButton);
+  todoList.appendChild(viewButton);
   todoList.appendChild(lineBreak);
   console.log(todoLink);
 }
@@ -47,5 +57,17 @@ const deleteTodo = function(event){
   let req = new XMLHttpRequest();
   req.addEventListener("load",removeTodo);
   req.open("delete","/deleteTodo");
+  req.send(`todoId=${todoId}`);
+};
+
+const displayTodo = function(){
+  
+}
+
+const viewTodo = function(event){
+  let todoId = event.target.id;
+  let req = new XMLHttpRequest();
+  req.addEventListener("load",displayTodo);
+  req.open("POST","/viewTodo");
   req.send(`todoId=${todoId}`);
 };

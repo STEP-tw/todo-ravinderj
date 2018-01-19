@@ -5,9 +5,11 @@ let showTodoList = function(){
   titlesInfo.forEach((titleInfo)=>{
     let todoLink = createLink(titleInfo);
     let delbutton = createDelButton(titleInfo.todoId);
+    let viewButton = createViewButton(titleInfo.todoId);
     let lineBreak = document.createElement("br");
     todoList.appendChild(todoLink);
     todoList.appendChild(delbutton);
+    todoList.appendChild(viewButton);
     todoList.appendChild(lineBreak);
   })
   console.log(todoList);
