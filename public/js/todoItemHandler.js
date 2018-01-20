@@ -1,7 +1,8 @@
 const showItem = function(){
-  let itemText = this.responseText.text;
-  let todoId = this.responseText.todoId;
-  let itemId = this.responseText.itemId;
+  let todoItem = JSON.parse(this.responseText);
+  let itemText = todoItem.text;
+  let todoId = todoItem.todoId;
+  let itemId = todoItem.itemId;
   let para = document.createElement("p");
   para.innerHTML = itemText;
   para.id = itemId;
@@ -14,5 +15,5 @@ const createItem = function(){
   let req = new XMLHttpRequest();
   req.addEventListener("load",showItem);
   req.open("POST","/addItem");
-  req.send(`todoItem=${text}`);
+  req.send(`text=${text}`);
 };
