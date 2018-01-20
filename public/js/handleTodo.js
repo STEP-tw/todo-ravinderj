@@ -6,10 +6,10 @@ const createLink = (todo)=>{
   return link;
 }
 
-const createDelButton = function(todoId){
+const createDelButton = function(id){
   let delButton = document.createElement("button");
   delButton.innerText = "delete";
-  delButton.id = todoId;
+  delButton.id = id;
   delButton.onclick = deleteTodo;
   return delButton;
 }

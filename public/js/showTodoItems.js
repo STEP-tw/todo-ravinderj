@@ -1,25 +1,40 @@
-let showTodoList = function(){
-  let titlesInfo = JSON.parse(this.responseText);
-  let todoList = document.getElementById("todoList");
-  console.log(titlesInfo);
-  titlesInfo.forEach((titleInfo)=>{
-    let todoLink = createLink(titleInfo);
-    let delbutton = createDelButton(titleInfo.todoId);
-    let viewButton = createViewButton(titleInfo.todoId);
+const createTodoItem = function(todoItem){
+  let para = document.createElement("p");
+  para.innerText = todoItem.text;
+  para.id = todoItem.id;
+  return para;
+}
+
+const createDelButton = function(id){
+  let delButton = document.createElement("button");
+  delButton.innerText = "delete";
+  delButton.id = id;
+  // delButton.onclick = deleteTodo;
+  return delButton;
+}
+
+const showItemsList = function(){
+  let todoItems = JSON.parse(this.responseText);
+  console.log(todoItems);
+  let itemsDiv = document.getElementsByClassName("items")[0];
+  todoItems.forEach(item=>{
+    let todoItem = createTodoItem(item);
+    let delbutton = createDelButton(item.id);
     let lineBreak = document.createElement("br");
-    todoList.appendChild(todoLink);
-    todoList.appendChild(delbutton);
-    todoList.appendChild(viewButton);
-    todoList.appendChild(lineBreak);
+    itemsDiv.appendChild(todoItem);
+    itemsDiv.appendChild(delbutton);
+    itemsDiv.appendChild(lineBreak);
   })
-  console.log(todoList);
 }
+// let editButton = createEditButton();
+// itemsDiv.appendChild(editButton);
 
-let showTitles = function(){
+let showTodoItems = function(){
+  let todoId = document.querySelector("h1").id;
   let req = new XMLHttpRequest();
-  req.addEventListener("load",showTodoList);
-  req.open("GET","/titles");
-  req.send();
+  req.addEventListener("load",showItemsList);
+  req.open("POST","/todoItems");
+  req.send(`todoId=${todoId}`);
 }
 
-window.onload = showTitles;
+window.onload = showTodoItems;

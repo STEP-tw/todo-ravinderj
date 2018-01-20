@@ -7,7 +7,6 @@ app.remove("/deleteTodo",lib.deleteTodo);
 app.get("/home", lib.serveHome);
 app.get("/login",lib.serveLogin);
 app.get("/titles",lib.sendTitleInfo);
-app.get("/todoItems",lib.sendItemsInfo);
 app.get("/logout", lib.logoutUser);
 app.use(lib.logRequest);
 app.use(lib.loadUser);
@@ -16,7 +15,8 @@ app.use(lib.todoHandler);
 app.use(lib.redirectToHomeIfLoggedin);
 app.use(lib.redirectToLoginIfLoggedOut);
 app.post("/create", lib.createTodo);
-app.post("/addItem", lib.sendTodoItem);
+app.post("/todoItems",lib.sendItemsInfo);
+app.post("/addItem", lib.createItem);
 app.post("/login", lib.loginUser);
 app.post("/viewTodo", lib.sendTodoView);
 
