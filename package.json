@@ -2,7 +2,7 @@
   "name": "todo-ravinderj",
   "version": "1.0.0",
   "description": "## Objective",
-  "main": "app.js",
+  "main": "server.js",
   "directories": {
     "test": "test"
   },

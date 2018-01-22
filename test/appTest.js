@@ -14,9 +14,16 @@ describe('app', () => {
     })
   })
   describe('GET /', () => {
-    it('redirects to login for invalid user', done => {
+    it('redirects to login for loggedout user', done => {
       request(app, { method: 'GET', url: '/' }, (res) => {
         th.should_be_redirected_to(res, '/login');
+        assert.equal(res.body, "");
+        done();
+      })
+    })
+    it('redirects to home for loggedin user', done => {
+      request(app, { method: 'GET', url: '/',headers:{cookie:"userName=ravinder"}}, (res) => {
+        th.should_be_redirected_to(res, '/home');
         assert.equal(res.body, "");
         done();
       })
@@ -48,7 +55,7 @@ describe('app', () => {
     })
   })
   describe('GET /login', () => {
-    it('serves login page', done => {
+    it('serves login for loggedout user', done => {
       request(app, { method: 'GET', url: '/login' }, res => {
         th.status_is_ok(res);
         th.body_contains(res, 'login to create to-do');
@@ -57,8 +64,8 @@ describe('app', () => {
         done();
       })
     })
-    it.skip('serves home for loggedin user', done => {
-      request(app,{method: "GET", url: "/login", cookies: "userName=ravinder"},res=>{
+    it('serves home for loggedin user', done => {
+      request(app,{method: "GET", url: "/login", headers:{cookie:"userName=ravinder"}},res=>{
         th.should_be_redirected_to(res, '/home');
         done();
       })
@@ -71,9 +78,9 @@ describe('app', () => {
         done();
       })
     })
-    it.skip('serves home if logged in', done => {
-      request(app, { method: 'GET', url: '/home', headers: {cookie: "userName=ravinder"}}, res => {
-        th.should_be_redirected_to(res,"/home");
+    it('serves home if logged in', done => {
+      request(app, { method: 'GET', url: '/home', headers:{cookie:"userName=ravinder"}}, res => {
+        th.status_is_ok(res);
         done();
       })
     })
@@ -86,7 +93,7 @@ describe('app', () => {
         done();
       })
     })
-    it('responds with 404', (done) => {
+    it('responds with 404 when title and description are not given', (done) => {
       request(app, { method: 'GET', url: '/create', body: '{title: "", description: ""}' }, res => {
         th.status_not_found(res);
         th.body_does_not_contain(res, 'todoTitle')
