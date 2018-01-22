@@ -9,7 +9,7 @@ const createDelButton = function(id){
   let delButton = document.createElement("button");
   delButton.innerText = "delete";
   delButton.id = id;
-  // delButton.onclick = deleteItem;
+  delButton.onclick = deleteItem;
   return delButton;
 }
 
@@ -35,6 +35,22 @@ let showTodoItems = function(){
   req.addEventListener("load",showItemsList);
   req.open("POST","/todoItems");
   req.send(`todoId=${todoId}`);
+}
+
+const refreshPage = function(){
+  window.location.reload();
+}
+const removeItem = function(){
+  refreshPage();
+}
+
+const deleteItem = function(){
+  let itemId = event.target.id;
+  let todoId = document.querySelector('h1').id;
+  let req = new XMLHttpRequest();
+  req.addEventListener("load",removeItem);
+  req.open("POST","/deleteItem");
+  req.send(`itemId=${itemId}&todoId=${todoId}`);
 }
 
 window.onload = showTodoItems;

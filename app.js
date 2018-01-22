@@ -17,6 +17,7 @@ app.use(lib.redirectToLoginIfLoggedOut);
 app.post("/create", lib.createTodo);
 app.post("/todoItems",lib.sendItemsInfo);
 app.post("/addItem", lib.createItem);
+app.post("/deleteItem", lib.deleteItem);
 app.post("/login", lib.loginUser);
 app.post("/viewTodo", lib.sendTodoView);
 
