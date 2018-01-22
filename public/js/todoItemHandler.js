@@ -3,8 +3,7 @@ const showItem = function(){
   let todoItem = JSON.parse(this.responseText);
   let itemText = todoItem.text;
   let itemId = todoItem.id;
-  let itemClass = createItemClass(todoItem,itemId);
-  itemsDiv.appendChild(itemClass);
+  appendTodoItem(todoItem,itemsDiv);
 }
 
 const createItem = function(){
