@@ -1,3 +1,4 @@
+process.env.testMode = true;
 let chai = require('chai');
 let assert = chai.assert;
 let request = require('./requestSimulator.js');
@@ -41,6 +42,13 @@ describe('app', () => {
       request(app, { method: 'POST', url: '/login', body: 'name=baduser' }, res => {
         th.should_be_redirected_to(res, '/login');
         th.should_have_cookie(res, 'message', "logInFailed");
+        done();
+      })
+    })
+    it('res body should contain login failed message invalid login', done => {
+      request(app, { method: 'GET', url: '/login', headers:{cookie:"message=logInFailed"} }, res => {
+        th.status_is_ok(res);
+        th.body_contains(res,"Invalid user or password!")
         done();
       })
     })
@@ -139,6 +147,28 @@ describe('app', () => {
         th.body_contains(res,"basic functionalities");
         done();
       })
+    })
+  })
+  describe.skip('#servePage',()=>{
+    it('should serve static files',(done)=>{
+      request(app,{method: "GET",url: "/login.js"},res=>{
+        let content = "";
+        res.write = (data)=>{
+          content+=data;
+        }
+        res.end = ()=>content
+        fs = {
+          statSync: (fileName)=>{
+            return {
+              isFile: ()=>{
+                return (fileName==file) ?true : false;
+              }
+            }
+          }
+        }
+        assert.equal(res.statusCode,200);
+      })
+      done();
     })
   })
 })
