@@ -17,6 +17,7 @@ const createEditButton  = function(id){
   let editButton = document.createElement("button");
   editButton.innerText = "Edit";
   editButton.id = id;
+  editButton.onclick = createInputToEdit;
   return editButton;
 }
 
@@ -58,6 +59,14 @@ const deleteItem = function(){
   req.addEventListener("load",removeItem);
   req.open("POST","/deleteItem");
   req.send(`itemId=${itemId}&todoId=${todoId}`);
+}
+
+const createInputToEdit = function(){
+  let itemId = event.target.id;
+  let textElement = document.getElementById(itemId);
+  let inputElement = document.createElement("input");
+  inputElement.value = textElement.innerText;
+  textElement.replaceWith(inputElement);
 }
 
 window.onload = showTodoItems;
