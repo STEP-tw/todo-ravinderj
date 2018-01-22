@@ -11,9 +11,10 @@ const showItem = function(){
 }
 
 const createItem = function(){
+  let todoId = document.querySelector("h1").id;
   let text = document.querySelector("#itemText").value;
   let req = new XMLHttpRequest();
   req.addEventListener("load",showItem);
   req.open("POST","/addItem");
-  req.send(`text=${text}`);
+  req.send(`todoId=${todoId}&text=${text}`);
 };

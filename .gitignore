@@ -4,3 +4,4 @@ node_modules/
 request.log
 data/
 .nyc_output
+coverage/

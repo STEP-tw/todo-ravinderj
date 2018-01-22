@@ -9,7 +9,7 @@ const createDelButton = function(id){
   let delButton = document.createElement("button");
   delButton.innerText = "delete";
   delButton.id = id;
-  // delButton.onclick = deleteTodo;
+  // delButton.onclick = deleteItem;
   return delButton;
 }
 
@@ -20,14 +20,14 @@ const showItemsList = function(){
   todoItems.forEach(item=>{
     let todoItem = createTodoItem(item);
     let delbutton = createDelButton(item.id);
+    // let editButton = createEditButton();
     let lineBreak = document.createElement("br");
     itemsDiv.appendChild(todoItem);
     itemsDiv.appendChild(delbutton);
+    // itemsDiv.appendChild(editButton);
     itemsDiv.appendChild(lineBreak);
   })
 }
-// let editButton = createEditButton();
-// itemsDiv.appendChild(editButton);
 
 let showTodoItems = function(){
   let todoId = document.querySelector("h1").id;
