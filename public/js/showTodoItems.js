@@ -1,7 +1,7 @@
 const createPara = function(todoItem){
   let para = document.createElement("p");
   para.innerText = todoItem.text;
-  para.id = todoItem.id;
+  para.className = todoItem.id;
   return para;
 }
 
