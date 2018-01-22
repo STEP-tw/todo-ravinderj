@@ -62,10 +62,11 @@ const editItem = function(){
 const sendEditItemRequest = function(){
   let todoId = document.querySelector('h1').id;
   let itemId = event.target.id;
+  let newText = document.getElementsByClassName(itemId)[0].value;
   let req = new XMLHttpRequest();
   req.addEventListener('load',editItem);
   req.open('PUT','/editItem');
-  req.send(`itemId=${itemId}&todoId=${todoId}`);
+  req.send(`itemId=${itemId}&todoId=${todoId}&newText=${newText}`);
 }
 
 const refreshPage = function(){
@@ -89,6 +90,7 @@ const createInputToEdit = function(){
   let itemId = event.target.id;
   let textElement = document.getElementsByClassName(itemId)[0];
   let inputElement = document.createElement("input");
+  inputElement.className = itemId;
   inputElement.value = textElement.innerText;
   textElement.replaceWith(inputElement);
   itemsDiv.removeChild(document.getElementById(itemId));

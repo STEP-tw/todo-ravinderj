@@ -40,7 +40,7 @@ describe('User', () => {
     user.addTodo(1, "sampleTodo", "for testing");
     user.addItem(1, "sample todo item for tests");
     let expectedOutput = user.getItem(1, 1);
-    assert.equal(user.todos[1][1], expectedOutput);
+    assert.equal(user.todos[1].items[1], expectedOutput);
   });
   it('should delete todo', () => {
     user.addTodo(1, "sampleTodo", "for testing");
