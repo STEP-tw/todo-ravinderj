@@ -7,10 +7,17 @@ const createPara = function(todoItem){
 
 const createDelButton = function(id){
   let delButton = document.createElement("button");
-  delButton.innerText = "delete";
+  delButton.innerText = "Delete";
   delButton.id = id;
   delButton.onclick = deleteItem;
   return delButton;
+}
+
+const createEditButton  = function(id){
+  let editButton = document.createElement("button");
+  editButton.innerText = "Edit";
+  editButton.id = id;
+  return editButton;
 }
 
 const showItemsList = function(){
@@ -20,11 +27,11 @@ const showItemsList = function(){
   todoItems.forEach(item=>{
     let todoItem = createPara(item);
     let delbutton = createDelButton(item.id);
-    // let editButton = createEditButton();
+    let editButton = createEditButton(item.id);
     let lineBreak = document.createElement("br");
     itemsDiv.appendChild(todoItem);
     itemsDiv.appendChild(delbutton);
-    // itemsDiv.appendChild(editButton);
+    itemsDiv.appendChild(editButton);
     itemsDiv.appendChild(lineBreak);
   })
 }

@@ -5,9 +5,11 @@ const showItem = function(){
   let itemId = todoItem.id;
   let para = createPara(todoItem);
   let delButton = createDelButton(itemId);
+  let editButton = createEditButton(itemId);
   let lineBreak = document.createElement("br");
   itemsDiv.appendChild(para);
   itemsDiv.appendChild(delButton);
+  itemsDiv.appendChild(editButton);
   itemsDiv.appendChild(lineBreak);
 }
 
