@@ -1,4 +1,4 @@
-const createTodoItem = function(todoItem){
+const createPara = function(todoItem){
   let para = document.createElement("p");
   para.innerText = todoItem.text;
   para.id = todoItem.id;
@@ -18,7 +18,7 @@ const showItemsList = function(){
   console.log(todoItems);
   let itemsDiv = document.getElementsByClassName("items")[0];
   todoItems.forEach(item=>{
-    let todoItem = createTodoItem(item);
+    let todoItem = createPara(item);
     let delbutton = createDelButton(item.id);
     // let editButton = createEditButton();
     let lineBreak = document.createElement("br");

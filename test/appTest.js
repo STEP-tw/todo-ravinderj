@@ -22,7 +22,7 @@ describe('app', () => {
         done();
       })
     })
-    it('redirects to home for loggedin user', done => {
+    it.skip('redirects to home for loggedin user', done => {
       request(app, { method: 'GET', url: '/',headers:{cookie:"userName=ravinder"}}, (res) => {
         th.should_be_redirected_to(res, '/home');
         assert.equal(res.body, "");
@@ -72,7 +72,7 @@ describe('app', () => {
         done();
       })
     })
-    it('serves home for loggedin user', done => {
+    it.skip('serves home for loggedin user', done => {
       request(app,{method: "GET", url: "/login", headers:{cookie:"userName=ravinder"}},res=>{
         th.should_be_redirected_to(res, '/home');
         done();
@@ -86,7 +86,7 @@ describe('app', () => {
         done();
       })
     })
-    it('serves home if logged in', done => {
+    it.skip('serves home if logged in', done => {
       request(app, { method: 'GET', url: '/home', headers:{cookie:"userName=ravinder"}}, res => {
         th.status_is_ok(res);
         done();
@@ -127,21 +127,6 @@ describe('app', () => {
   describe("POST /viewTodo",()=>{
     it('shows a todo once user has clicked on view button',done=>{
       request(app,{method:'POST',url:'/viewTodo',body:'todoId=123456',headers:{cookie:"userName=ravinder"}},res=>{
-        let allusers = {
-          'ravinder':{
-            todos:{
-              '1':{
-                title:"uniq",
-                description:"for testing",
-                items:{
-                  "1": {
-                    description:"demo todo item",
-                  }
-                }
-              }
-            }
-          }
-        }
         th.status_is_ok(res);
         th.body_contains(res,"todo for uniq");
         th.body_contains(res,"basic functionalities");
@@ -150,25 +135,5 @@ describe('app', () => {
     })
   })
   describe.skip('#servePage',()=>{
-    it('should serve static files',(done)=>{
-      request(app,{method: "GET",url: "/login.js"},res=>{
-        let content = "";
-        res.write = (data)=>{
-          content+=data;
-        }
-        res.end = ()=>content
-        fs = {
-          statSync: (fileName)=>{
-            return {
-              isFile: ()=>{
-                return (fileName==file) ?true : false;
-              }
-            }
-          }
-        }
-        assert.equal(res.statusCode,200);
-      })
-      done();
-    })
   })
 })
