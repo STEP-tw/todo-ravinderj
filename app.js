@@ -18,8 +18,8 @@ app.post("/create", lib.createTodo);
 app.post("/todoItems",lib.sendItemsInfo);
 app.post("/addItem", lib.createItem);
 app.post("/deleteItem", lib.deleteItem);
-app.post("/editItem", lib.editItem);
 app.post("/login", lib.loginUser);
 app.post("/viewTodo", lib.sendTodoView);
+app.put("/editItem", lib.editItem);
 
 exports.app = app;

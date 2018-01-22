@@ -21,6 +21,14 @@ const createEditButton  = function(id){
   return editButton;
 }
 
+const createSubmitButton = function(id){
+  let submitButton = document.createElement("button");
+  submitButton.innerText = "Submit";
+  submitButton.id = id;
+  submitButton.onclick = sendEditItemRequest;
+  return submitButton;
+}
+
 const appendTodoItem = function(item,itemsDiv){
   let todoItem = createPara(item);
   let delbutton = createDelButton(item.id);
@@ -47,6 +55,19 @@ let showTodoItems = function(){
   req.send(`todoId=${todoId}`);
 }
 
+const editItem = function(){
+  refreshPage();
+}
+
+const sendEditItemRequest = function(){
+  let todoId = document.querySelector('h1').id;
+  let itemId = event.target.id;
+  let req = new XMLHttpRequest();
+  req.addEventListener('load',editItem);
+  req.open('PUT','/editItem');
+  req.send(`itemId=${itemId}&todoId=${todoId}`);
+}
+
 const refreshPage = function(){
   window.location.reload();
 }
@@ -64,11 +85,15 @@ const deleteItem = function(){
 }
 
 const createInputToEdit = function(){
+  let itemsDiv = document.getElementsByClassName("items")[0];
   let itemId = event.target.id;
-  let textElement = document.getElementById(itemId);
+  let textElement = document.getElementsByClassName(itemId)[0];
   let inputElement = document.createElement("input");
   inputElement.value = textElement.innerText;
   textElement.replaceWith(inputElement);
+  itemsDiv.removeChild(document.getElementById(itemId));
+  let submitButton = createSubmitButton(itemId);
+  document.getElementById(itemId).replaceWith(submitButton);
 }
 
 window.onload = showTodoItems;

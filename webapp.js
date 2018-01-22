@@ -33,7 +33,7 @@ let invoke = function(req,res){
   handler(req,res);
 }
 const initialize = function(){
-  this._handlers = {GET:{},POST:{},DELETE:{}};
+  this._handlers = {GET:{},POST:{},DELETE:{},PUT:{}};
   this._preprocess = [];
 };
 const get = function(url,handler){
@@ -42,6 +42,9 @@ const get = function(url,handler){
 const post = function(url,handler){
   this._handlers.POST[url] = handler;
 };
+const put = function(url,handler){
+  this._handlers.PUT[url] = handler;
+}
 const remove = function(url,handler){
   this._handlers.DELETE[url] = handler;
 }
@@ -77,6 +80,7 @@ let create = ()=>{
   initialize.call(rh);
   rh.get = get;
   rh.post = post;
+  rh.put = put;
   rh.use = use;
   rh.remove = remove;
   return rh;
