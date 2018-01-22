@@ -21,19 +21,26 @@ const createEditButton  = function(id){
   return editButton;
 }
 
+const createItemClass = function(todoItem,itemId){
+  let itemClass = document.createElement("class");
+  let para = createPara(todoItem);
+  let delButton = createDelButton(itemId);
+  let editButton = createEditButton(itemId);
+  let lineBreak = document.createElement("br");
+  itemClass.appendChild(para);
+  itemClass.appendChild(delButton);
+  itemClass.appendChild(editButton);
+  itemClass.appendChild(lineBreak);
+  return itemClass;
+}
+
 const showItemsList = function(){
   let todoItems = JSON.parse(this.responseText);
   console.log(todoItems);
   let itemsDiv = document.getElementsByClassName("items")[0];
   todoItems.forEach(item=>{
-    let todoItem = createPara(item);
-    let delbutton = createDelButton(item.id);
-    let editButton = createEditButton(item.id);
-    let lineBreak = document.createElement("br");
-    itemsDiv.appendChild(todoItem);
-    itemsDiv.appendChild(delbutton);
-    itemsDiv.appendChild(editButton);
-    itemsDiv.appendChild(lineBreak);
+    let itemClass = createItemClass(item,item.id);
+    itemsDiv.appendChild(itemClass);
   })
 }
 

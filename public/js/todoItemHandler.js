@@ -3,14 +3,8 @@ const showItem = function(){
   let todoItem = JSON.parse(this.responseText);
   let itemText = todoItem.text;
   let itemId = todoItem.id;
-  let para = createPara(todoItem);
-  let delButton = createDelButton(itemId);
-  let editButton = createEditButton(itemId);
-  let lineBreak = document.createElement("br");
-  itemsDiv.appendChild(para);
-  itemsDiv.appendChild(delButton);
-  itemsDiv.appendChild(editButton);
-  itemsDiv.appendChild(lineBreak);
+  let itemClass = createItemClass(todoItem,itemId);
+  itemsDiv.appendChild(itemClass);
 }
 
 const createItem = function(){
