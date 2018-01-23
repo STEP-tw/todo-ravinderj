@@ -21,6 +21,12 @@ describe('Todo', () => {
     todo.changeTitle("demo title");
     assert.equal(todo.title,"demo title");  
   });
+  it('should return id of a todo item',()=>{
+    todo.addItem('sample item');
+    let actualOutput = todo.getItemId();
+    let expectedOutput = 1;
+    assert.equal(actualOutput,expectedOutput);
+  })
   it('should change the description of todo', () => {
     todo.changeDescription("demo description");
     assert.equal(todo.description,"demo description");

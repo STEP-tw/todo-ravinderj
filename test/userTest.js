@@ -36,6 +36,16 @@ describe('User', () => {
     let actualOutput = user.todos[1];
     assert.equal(expectedOutput, actualOutput);
   });
+  it('should add todo item in todo',()=>{
+    user.addTodo(1, "sampleTodo", "for testing");
+    let itemId = user.addItem(1,"sample todo item");
+    let actualOutput = user.getItem(1,itemId);
+    let expectedOutput = {
+      description: "sample todo item",
+      isDone: false
+    }
+    assert.deepEqual(actualOutput,expectedOutput);
+  })
   it('should get todo item', () => {
     user.addTodo(1, "sampleTodo", "for testing");
     user.addItem(1, "sample todo item for tests");
@@ -79,4 +89,15 @@ describe('User', () => {
     }
     assert.deepEqual(actualOutput, expectedOutput);
   });
+  it('should edit an item',()=>{
+    user.addTodo(1, "sample todo", "for testing");
+    let itemId = user.addItem(1,"sample todo item");
+    user.editItem(1,itemId,'something new');
+    let actualOutput = user.getItem(1,itemId);
+    let expectedOutput = {
+      description: 'something new',
+      isDone: false
+    }
+    assert.deepEqual(actualOutput,expectedOutput);
+  })
 });
