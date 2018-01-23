@@ -1,5 +1,6 @@
 const WebApp = require('./webapp');
 const lib = require("./lib/serverLIb.js");
+const fs = require("fs");
 
 let app = WebApp.create();
 
@@ -8,7 +9,7 @@ app.get("/home", lib.serveHome);
 app.get("/login",lib.serveLogin);
 app.get("/titles",lib.sendTitleInfo);
 app.get("/logout", lib.logoutUser);
-app.use(lib.logRequest);
+app.use((req,res)=>lib.logRequest(fs,'request.log',req,res));
 app.use(lib.loadUser);
 app.use(lib.servePage);
 app.use(lib.todoHandler);
