@@ -19,6 +19,7 @@ let showTitles = function(){
   let req = new XMLHttpRequest();
   req.addEventListener("load",showTodoList);
   req.open("GET","/titles");
+  req.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
   req.send();
 }
 

@@ -5,7 +5,7 @@ let request = require('./requestSimulator.js');
 let app = require('../app.js').app;
 let th = require('./testHelper.js');
 
-describe('app', () => {
+describe.skip('app', () => {
   describe('GET /bad', () => {
     it('responds with 404', done => {
       request(app, { method: 'GET', url: '/bad' }, (res) => {
@@ -133,7 +133,5 @@ describe('app', () => {
         done();
       })
     })
-  })
-  describe.skip('#servePage',()=>{
   })
 })

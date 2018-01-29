@@ -52,6 +52,7 @@ let showTodoItems = function(){
   let req = new XMLHttpRequest();
   req.addEventListener("load",showItemsList);
   req.open("POST","/todoItems");
+  req.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
   req.send(`todoId=${todoId}`);
 }
 
@@ -66,6 +67,7 @@ const sendEditItemRequest = function(){
   let req = new XMLHttpRequest();
   req.addEventListener('load',editItem);
   req.open('PUT','/editItem');
+  req.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
   req.send(`itemId=${itemId}&todoId=${todoId}&newText=${newText}`);
 }
 
@@ -81,7 +83,8 @@ const deleteItem = function(){
   let todoId = document.querySelector('h1').id;
   let req = new XMLHttpRequest();
   req.addEventListener("load",removeItem);
-  req.open("POST","/deleteItem");
+  req.open("DELETE","/deleteItem");
+  req.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
   req.send(`itemId=${itemId}&todoId=${todoId}`);
 }
 

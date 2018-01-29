@@ -42,13 +42,13 @@ const createTodo = function(){
   let req = new XMLHttpRequest();
   req.addEventListener("load",showTodo);
   req.open("POST","/create");
+  req.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
   req.send(`title=${title}&description=${description}`);
 }
 
 const refreshPage = ()=>window.location.reload();
 const removeTodo = function(){
-  let response = this.responseText;
-  console.log(response);
+  // let response = this.responseText;
   refreshPage();
 }
 
@@ -57,6 +57,7 @@ const deleteTodo = function(event){
   let req = new XMLHttpRequest();
   req.addEventListener("load",removeTodo);
   req.open("delete","/deleteTodo");
+  req.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
   req.send(`todoId=${todoId}`);
 };
 
@@ -71,5 +72,6 @@ const viewTodo = function(event){
   let req = new XMLHttpRequest();
   req.addEventListener("load",displayTodo);
   req.open("POST","/viewTodo");
+  req.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
   req.send(`todoId=${todoId}`);
 };
