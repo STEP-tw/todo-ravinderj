@@ -54,6 +54,40 @@ describe('lib_utils',()=>{
       assert.deepEqual(actualOutput,expectedOutput);
     })
   })
+  describe('#getTodoData',()=>{
+    it('should return todo details',done=>{
+      let req = {
+        cookies: {
+          userName: "ravinder"
+        },
+        body: {
+          title: 'Todo',
+          description : 'Todo for todo'
+        }
+      }
+      let todoData = lib.getTodoData(req);
+      assert.equal(todoData.userName,'ravinder');
+      assert.equal(todoData.title,'Todo');
+      assert.equal(todoData.description,'Todo for todo');
+      done();
+    })
+    it('should create new user if user is not there and should return todo data',done=>{
+      let req = {
+        cookies: {
+          userName: "manish"
+        },
+        body: {
+          title: 'Todo',
+          description : 'Todo for todo'
+        }
+      }
+      let todoData = lib.getTodoData(req);
+      assert.equal(todoData.userName,'manish');
+      assert.equal(todoData.title,'Todo');
+      assert.equal(todoData.description,'Todo for todo');
+      done();
+    })
+  })
   describe('#isFile',()=>{
     let fs;
     let file;
@@ -63,7 +97,7 @@ describe('lib_utils',()=>{
         statSync: (fileName)=>{
           return {
             isFile: ()=>{
-              return (fileName==file) ?true : false;
+              return (fileName==file) ? true : false;
             }
           }
         }

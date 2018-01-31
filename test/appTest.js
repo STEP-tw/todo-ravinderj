@@ -1,59 +1,59 @@
 process.env.testMode = true;
-let chai = require('chai');
-let assert = chai.assert;
-let request = require('./requestSimulator.js');
-let app = require('../app.js').app;
-let th = require('./testHelper.js');
+const chai = require('chai');
+const assert = chai.assert;
+const request = require('supertest');
+const app = require('../app.js').app;
 
-describe.skip('app', () => {
+describe('app', () => {
   describe('GET /bad', () => {
     it('responds with 404', done => {
-      request(app, { method: 'GET', url: '/bad' }, (res) => {
-        assert.equal(res.statusCode, 404);
-        done();
-      })
+      request(app)
+       .get('/bad')
+       .expect(404)
+       .end(done);
     })
   })
   describe('GET /', () => {
     it('redirects to login for loggedout user', done => {
-      request(app, { method: 'GET', url: '/' }, (res) => {
-        th.should_be_redirected_to(res, '/login');
-        assert.equal(res.body, "");
-        done();
-      })
-    })
-    it.skip('redirects to home for loggedin user', done => {
-      request(app, { method: 'GET', url: '/',headers:{cookie:"userName=ravinder"}}, (res) => {
-        th.should_be_redirected_to(res, '/home');
-        assert.equal(res.body, "");
-        done();
-      })
+      request(app)
+      .get('/')
+      .expect(302)
+      .expect('Location','/login.html')
+      .end(done);
     })
   })
-  describe('POST /login', () => {
+  describe.skip('POST /login', () => {
     it('redirects to home for valid user', done => {
-      request(app, { method: 'POST', url: '/login', body: 'name=ravinder' }, res => {
-        th.should_be_redirected_to(res, '/home');
-        th.should_not_have_cookie(res, 'login failed');
-        done();
-      })
+      request(app)
+      .post('/login.html')
+      // .set('Cookie',['sessionid=1234','userName=ravinder'])
+      .send("userName=ravinder")
+      .expect(302)
+      .expect('Location','/home')
+      .end(done);
     })
     it('redirects to login for invalid user', done => {
-      request(app, { method: 'POST', url: '/login', body: 'name=baduser' }, res => {
-        th.should_be_redirected_to(res, '/login');
-        th.should_have_cookie(res, 'message', "logInFailed");
-        done();
-      })
+      request(app)
+      .post('/login.html')
+      .expect(302)
+      .expect('Location','/login.html')
+      .end(done);
     })
-    it('res body should contain login failed message invalid login', done => {
-      request(app, { method: 'GET', url: '/login', headers:{cookie:"message=logInFailed"} }, res => {
-        th.status_is_ok(res);
-        th.body_contains(res,"Invalid user or password!")
-        done();
-      })
+    ////////////
+    it('res body should contain login failed message for invalid login', done => {
+      request(app)
+      .post('/login.html')
+      // .set('Cookie',['sessionid=1234','userName=omkar'])
+      .expect(200)
+      .end(done);
+      // request(app, { method: 'GET', url: '/login', headers:{cookie:"message=logInFailed"} }, res => {
+      //   th.status_is_ok(res);
+      //   th.body_contains(res,"Invalid user or password!")
+      //   done();
+      // })
     })
   })
-  describe('GET /logout', () => {
+  describe.skip('GET /logout', () => {
     it('redirects to login after logout', done => {
       request(app, { method: 'GET', url: '/logout' }, res => {
         th.should_be_redirected_to(res, '/login');
@@ -62,7 +62,7 @@ describe.skip('app', () => {
       })
     })
   })
-  describe('GET /login', () => {
+  describe.skip('GET /login', () => {
     it('serves login for loggedout user', done => {
       request(app, { method: 'GET', url: '/login' }, res => {
         th.status_is_ok(res);
@@ -72,14 +72,14 @@ describe.skip('app', () => {
         done();
       })
     })
-    it.skip('serves home for loggedin user', done => {
+    it('serves home for loggedin user', done => {
       request(app,{method: "GET", url: "/login", headers:{cookie:"userName=ravinder"}},res=>{
         th.should_be_redirected_to(res, '/home');
         done();
       })
     })
   })
-  describe('GET /home', () => {
+  describe.skip('GET /home', () => {
     it('serves login if no user', done => {
       request(app, { method: 'GET', url: '/home'}, res => {
         th.should_be_redirected_to(res,"/login");
@@ -93,7 +93,7 @@ describe.skip('app', () => {
       })
     })
   })
-  describe('GET /create', () => {
+  describe.skip('GET /create', () => {
     it('responds with 404', (done) => {
       request(app, { method: 'GET', url: '/create', body: '{title: "todoTitle", description: "something"}' }, res => {
         th.status_not_found(res);
@@ -109,7 +109,7 @@ describe.skip('app', () => {
       })
     })
   });
-  describe('POST /create', () => {
+  describe.skip('POST /create', () => {
     it('creates a todo when title and description are given', (done) => {
       request(app, { method: 'POST', url: '/create', body: '{title: "todoTitle", description: "something"}' }, res => {
         th.status_is_ok(res);
@@ -124,7 +124,7 @@ describe.skip('app', () => {
       })
     })
   })
-  describe("POST /viewTodo",()=>{
+  describe.skip("POST /viewTodo",()=>{
     it('shows a todo once user has clicked on view button',done=>{
       request(app,{method:'POST',url:'/viewTodo',body:'todoId=123456',headers:{cookie:"userName=ravinder"}},res=>{
         th.status_is_ok(res);
