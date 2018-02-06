@@ -25,9 +25,9 @@ describe('app', () => {
   describe('GET /bad', () => {
     it('responds with 404', done => {
       request(app)
-       .get('/bad')
-       .expect(404)
-       .end(done);
+      .get('/bad')
+      .expect(404)
+      .end(done);
     })
   })
   describe('GET /', () => {
@@ -52,7 +52,7 @@ describe('app', () => {
     it('serves login page for invalid user with login failed message', done => {
       request(app)
       .post('/login.html')
-      .send("name=bad")      
+      .send("name=bad")
       .expect(200)
       .expect(/Wrong username/)
       .expect(/login/)
@@ -76,66 +76,78 @@ describe('app', () => {
       .expect('Content-Type',/html/)
       .end(done);
     })
-    it.skip('serves home for loggedin user', done => {
-      request(app,{method: "GET", url: "/login", headers:{cookie:"userName=ravinder"}},res=>{
-        th.should_be_redirected_to(res, '/home');
-        done();
-      })
+    it('serves home for loggedin user', done => {
+      request(app)
+      .get('/login.html')
+      .send("name=ravinder")
+      .set('cookie','sessionid=1234;userName=ravinder')
+      .expect(302)
+      .expect('Location','/home')
+      .end(done);
     })
   })
-  describe.skip('GET /home', () => {
-    it.skip('serves login if no user', done => {
-      request(app, { method: 'GET', url: '/home'}, res => {
-        th.should_be_redirected_to(res,"/login");
-        done();
-      })
+  describe('GET /home', () => {
+    it('serves login if no user', done => {
+      request(app)
+      .get('/home')
+      .expect(302)
+      .expect('Location','/login.html')
+      .end(done);
     })
-    it.skip('serves home if logged in', done => {
-      request(app, { method: 'GET', url: '/home', headers:{cookie:"userName=ravinder"}}, res => {
-        th.status_is_ok(res);
-        done();
-      })
+    it('serves home if logged in', done => {
+      request(app)
+      .get('/home')
+      .send("name=ravinder")
+      .set('cookie','sessionid=1234;userName=ravinder')
+      .expect(200)
+      .expect('Content-Type',/html/)
+      .end(done);
     })
   })
-  describe.skip('GET /create', () => {
-    it.skip('responds with 404', (done) => {
-      request(app, { method: 'GET', url: '/create', body: '{title: "todoTitle", description: "something"}' }, res => {
-        th.status_not_found(res);
-        th.body_does_not_contain(res, 'todoTitle');
-        done();
-      })
+  describe('GET /create', () => {
+    it('responds with 404', (done) => {
+      request(app)
+      .get('/create')
+      .expect(404)
+      .expect(doesNotContain(/todoTitle/))
+      .end(done);
     })
-    it.skip('responds with 404 when title and description are not given', (done) => {
-      request(app, { method: 'GET', url: '/create', body: '{title: "", description: ""}' }, res => {
-        th.status_not_found(res);
-        th.body_does_not_contain(res, 'todoTitle')
-        done();
-      })
+    it('responds with 404 when title and description are not given', (done) => {
+      request(app)
+      .get('/create')
+      .send('title=""&description=""')
+      .expect(404)
+      .expect(doesNotContain(/todoTitle/))
+      .end(done);
     })
   });
-  describe.skip('POST /create', () => {
-    it.skip('creates a todo when title and description are given', (done) => {
-      request(app, { method: 'POST', url: '/create', body: '{title: "todoTitle", description: "something"}' }, res => {
-        th.status_is_ok(res);
-        th.body_contains(res, 'todoTitle')
-        done();
-      })
+  describe('POST /create', () => {
+    it('creates a todo when title and description are given', (done) => {
+      request(app)
+      .post('/create')
+      .send('title="todoTitle"&description="something"')
+      .expect(200)
+      .expect(/todoTitle/)
+      .end(done);
     })
-    it.skip('redirects to home when title and description are not given', (done) => {
-      request(app, { method: 'POST', url: '/create', body: '{title: "", description: ""}' }, res => {
-        th.body_does_not_contain(res, 'todoTitle')
-        done();
-      })
+    it('redirects to home when title and description are not given', (done) => {
+      request(app)
+      .post('/create')
+      .send('title=""&description=""')
+      .expect(doesNotContain(/todoTitle/))
+      .end(done);
     })
   })
-  describe.skip("POST /viewTodo",()=>{
-    it.skip('shows a todo once user has clicked on view button',done=>{
-      request(app,{method:'POST',url:'/viewTodo',body:'todoId=123456',headers:{cookie:"userName=ravinder"}},res=>{
-        th.status_is_ok(res);
-        th.body_contains(res,"todo for uniq");
-        th.body_contains(res,"basic functionalities");
-        done();
-      })
+  describe("POST /viewTodo",()=>{
+    it('shows a todo once user has clicked on view button',done=>{
+      request(app)
+      .post('/viewTodo')
+      .send('todoId=123456')
+      .set('cookie','sessionid=1234;userName=ravinder')
+      .expect(/todo for uniq/)
+      .expect(/basic functionalities/)
+      .expect(200)
+      .end(done);
     })
   })
 })
