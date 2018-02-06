@@ -13,7 +13,7 @@ describe('logRequest',()=>{
     }
     let res = {};
     let fs = new Fs();
-    fs.addFile('hello.txt','hello world');    
+    fs.addFile('hello.txt','hello world');
     logRequest(fs,'hello.txt',req,res);
     let helloFile = fs.readFileSync('hello.txt');
     assert.include(helloFile,'GET /home');

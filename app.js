@@ -11,8 +11,8 @@ app.sessionidGenerator = function(){
 
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());
-app.use(lib.todoHandler);
 app.use(lib.loadUser);
+app.use(lib.todoHandler);
 app.use(lib.redirectToLoginIfLoggedOut);
 app.use(lib.redirectToHomeIfLoggedin);
 app.use(express.static('public'));

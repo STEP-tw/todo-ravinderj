@@ -11,6 +11,13 @@ let doesNotContain = (pattern)=>{
   }
 };
 
+let doesContain = (pattern)=>{
+  return (res)=>{
+    let match = res.text.match(pattern);
+    return match;
+  }
+};
+
 app.sessionidGenerator = function(){
   return '1234';
 }
@@ -74,6 +81,7 @@ describe('app', () => {
       .get('/login.html')
       .expect(200)
       .expect('Content-Type',/html/)
+      .expect(/login/)
       .end(done);
     })
     it('serves home for loggedin user', done => {
@@ -101,6 +109,7 @@ describe('app', () => {
       .set('cookie','sessionid=1234;userName=ravinder')
       .expect(200)
       .expect('Content-Type',/html/)
+      .expect(/TO-DO/)
       .end(done);
     })
   })
@@ -146,6 +155,74 @@ describe('app', () => {
       .set('cookie','sessionid=1234;userName=ravinder')
       .expect(/todo for uniq/)
       .expect(/basic functionalities/)
+      .expect(200)
+      .end(done);
+    })
+  })
+  describe('POST /addItem',()=>{
+    it('creates an item once the user clicks on add item button',done=>{
+      request(app)
+      .post('/addItem')
+      .send('todoId=123456&text="hello"')
+      .set('cookie','sessionid=1234;userName=ravinder')
+      .expect(/hello/)
+      .expect(200)
+      .end(done);
+    })
+  })
+  describe('PUT /editItem',()=>{
+    it('edits an item once the user clicks on edit button',done=>{
+      request(app)
+      .put('/editItem')
+      .send('todoId=123457&itemId=1&newText="hello"')
+      .set('cookie','sessionid=1234;userName=ravinder')
+      .expect(doesNotContain(/adding basic functionalities/))
+      .expect(/editing an item/)
+      .expect(200)
+      .end(done);
+    })
+  })
+  describe('DELETE /deleteItem',()=>{
+    it('deletes an item once the user clicks on delete button',done=>{
+      request(app)
+      .delete('/deleteItem')
+      .send('todoId=123456&itemId=1')
+      .set('cookie','sessionid=1234;userName=ravinder')
+      .expect(doesNotContain(/adding basic functionalities/))
+      .expect(/deleting an item/)
+      .expect(200)
+      .end(done);
+    })
+  })
+  describe('DELETE /deleteTodo',()=>{
+    it('deletes a todo once the user clicks on delete button',done=>{
+      request(app)
+      .delete('/deleteTodo')
+      .send('todoId=123456')
+      .set('cookie','sessionid=1234;userName=ravinder')
+      .expect(doesNotContain(/uniq/))
+      .expect(/deleting todo/)
+      .expect(200)
+      .end(done);
+    })
+  })
+  describe('POST /todoItems',()=>{
+    it('sends todo info once the user clicks on todo title link',done=>{
+      request(app)
+      .post('/todoItems')
+      .send('todoId=123457')
+      .set('cookie','sessionid=1234;userName=ravinder')
+      .expect(doesContain(/{"id":1,"text":"adding basic functionalities","isDone":true}/))
+      .expect(200)
+      .end(done);
+    })
+  })
+  describe('GET /titles',()=>{
+    it.skip('sends todo titles once the user enters home page',done=>{
+      request(app)
+      .get('/titles')
+      .set('cookie','sessionid=1234;userName=ravinder')
+      .expect(/hello/)
       .expect(200)
       .end(done);
     })
